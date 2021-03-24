@@ -2,37 +2,46 @@ import React, { Component } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 
 class EditDepartmentModal extends Component {
-  handleSubmit = event => {
+  state = {
+    name: this.props.name
+  };
+
+  handleChange = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  handleSubmit = async event => {
     event.preventDefault();
-    const body = {
-      "DepartmentId": event.target.DepartmentId.value,
-      "DepartmentName": JSON.stringify(event.target.DepartmentName.value)
+    const department = {
+      departmentId: this.props.id,
+      departmentName: this.state.name
     };
 
-    console.log(body);
-
-    fetch(process.env.REACT_APP_API + 'departments/' + this.props.id, {
+    const request = {
       method: 'PUT',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: {
-        "DepartmentId": event.target.DepartmentId.value,
-        "DepartmentName": JSON.stringify(event.target.DepartmentName.value)
+      body: JSON.stringify(department)
+    };
+
+    try {
+      const response = await fetch(
+        process.env.REACT_APP_API + 'departments/' + this.props.id,
+        request
+      );
+      if (!response.ok) {
+        alert('Error. See the log for details');
+        const responseBody = await response.json();
+        console.log(responseBody);
+      } else {
+        alert('Updated Department Successfully');
       }
-    })
-      .then(res => res.json())
-      .then(result => {
-        if (result.errors) {
-          alert('See the log for details');
-          console.log(result);
-        } else {
-          alert('Updated Department Successfully');
-          event.target.DepartmentName.value = '';
-        }
-      })
-      .catch(err => alert('Failed. See the log for details' + err));
+    } catch (error) {
+      alert('Error. See the log for details');
+      console.log(error);
+    }
   };
 
   render() {
@@ -73,6 +82,7 @@ class EditDepartmentModal extends Component {
                       required
                       placeholder="Name of Department"
                       defaultValue={this.props.name}
+                      onChange={this.handleChange}
                     />
                   </Form.Group>
 

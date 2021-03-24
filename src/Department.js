@@ -34,6 +34,23 @@ class Department extends Component {
     this.getDepartments();
   }
 
+  deleteDepartment = id => {
+    const request = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+
+    if (window.confirm('Are you sure?')) {
+      fetch(
+        process.env.REACT_APP_API + 'departments/' + id,
+        request
+      ).catch(err => console.log(err));
+    }
+  };
+
   render() {
     const { departments, modalOpen, editModalOpen, id, name } = this.state;
     return (
@@ -51,7 +68,7 @@ class Department extends Component {
               <tr key={departmentId}>
                 <td>{departmentId}</td>
                 <td>{departmentName}</td>
-                <td>
+                <td className="d-flex justify-content-center">
                   <ButtonToolbar>
                     <Button
                       className="mr-2"
@@ -65,6 +82,14 @@ class Department extends Component {
                       }
                     >
                       Edit
+                    </Button>
+
+                    <Button
+                      className="mr-2"
+                      variant="danger"
+                      onClick={() => this.deleteDepartment(departmentId)}
+                    >
+                      Delete
                     </Button>
                   </ButtonToolbar>
                 </td>

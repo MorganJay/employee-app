@@ -19,12 +19,14 @@ class EditEmployeeModal extends Component {
 
   handleChange = event => {
     const { name, value } = event.target;
+    console.log(name, value)
     this.setState({ [name]: value });
   };
 
   handleFileChange = event => {
     this.imageSrc =
       process.env.REACT_APP_PHOTO_PATH + event.target.files[0].name;
+
     console.log(this.imageSrc);
   };
 
@@ -39,20 +41,15 @@ class EditEmployeeModal extends Component {
     this.getDepartments();
   }
 
-  componentDidUpdate() {
-    //console.log('new props')
-    // this.PhotoFileName = this.props.photo_file_name;
-    // this.imageSrc = process.env.REACT_APP_PHOTO_PATH + this.PhotoFileName;
-  }
-
   handleSubmit = async event => {
     event.preventDefault();
+    console.log(this.state, 'state');
     const employee = {
       EmployeeId: this.props.id,
       EmployeeName: this.state.EmployeeName,
       Department: this.state.Department,
       DateEmployed: this.state.DateEmployed,
-      PhotoFileName: this.props.photoFileName //? this.props.photoFileName : 'anonymous.png'
+      PhotoFileName: this.props.photoFileName ? this.props.photoFileName : this.PhotoFileName
     };
     console.log(employee, 'employee');
     const request = {
@@ -115,18 +112,10 @@ class EditEmployeeModal extends Component {
   };
 
   render() {
-    const {
-      id,
-      name,
-      date_employed,
-      department,
-      photo_file_name,
-      onHide,
-      show
-    } = this.props;
-    // if (show) {
-    //   console.log(photo_file_name);
-    // }
+    const { id, name, date_employed, department, onHide, show } = this.props;
+    if (show) {
+      console.log(this.props);
+    }
 
     return (
       <div className="container">
@@ -218,13 +207,15 @@ class EditEmployeeModal extends Component {
                     src={this.imageSrc}
                     alt="Employee Picture"
                   />
-                  {/* {show ? console.log(this.imageSrc) : null} */}
                 </div>
-                <input type="file" onChange={this.handleFileChange}/>
+                <input
+                  type="file"
+                  onChange={this.handleFileChange}
+                  //  value={photo_file_name}
+                />
               </Col>
             </Row>
           </Modal.Body>
-          {/* //{console.log(photo_file_name)} */}
           <Modal.Footer>
             <Button variant="danger" onClick={onHide}>
               Close

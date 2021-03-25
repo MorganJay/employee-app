@@ -39,6 +39,10 @@ class Employee extends Component {
     this.getEmployees();
   }
 
+  // componentDidUpdate(){
+  //   this.getEmployees();
+  // }
+
   deleteEmployee = id => {
     const request = {
       method: 'DELETE',

@@ -38,7 +38,7 @@ class AddEmployeeModal extends Component {
       EmployeeName: EmployeeName,
       Department: Department,
       DateEmployed: DateEmployed,
-      PhotoFileName: this.state.PhotoFileName
+      PhotoFileName: this.PhotoFileName
     };
 
     const request = {
@@ -94,6 +94,7 @@ class AddEmployeeModal extends Component {
         alert('Error. See the log for details');
       } else {
         this.imageSrc = process.env.REACT_APP_PHOTO_PATH + responseBody;
+        console.log(this.imageSrc)
       }
     } catch (error) {
       console.log(error);
